@@ -2,7 +2,6 @@ const mongoose = require('mongoose'); //mongoose
 const validator = require('validator'); //validator
 const bcrypt = require('bcryptjs') //bcrypt
 const jwt = require('jsonwebtoken') //jsonwebtoken
-const LoggerModel = require('./logger')
 
 //https://mongoosejs.com/docs/guide.html#definition
 const userSchema = new mongoose.Schema(
