@@ -8,7 +8,7 @@ const LoggerSchema = new mongoose.Schema(
             required: true,
             enum: 
             {
-                values: ['signin', 'login', 'signin error', 'login error', 'record jwt', 'jwt error', 'logout'],
+                values: ['signin', 'login', 'login error', 'record jwt', 'jwt error', 'logout'],
                 message: '{VALUE} is not supported'
             }
         },

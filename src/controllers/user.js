@@ -1,7 +1,13 @@
 const UserModel = require('../models/user.js');
+const LoggerModel = require('../models/logger.js');
 
 const User = {}
 
+/**
+ * 
+ * @param {req.body.name, req.body.email, req.body.password, req.body.confirm} req 
+ * @param {user, token} res 
+ */
 User.signin = async(req, res) => 
 {
     const user = new UserModel(req.body)
@@ -10,9 +16,15 @@ User.signin = async(req, res) =>
     {
         try {
 
-            await user.save()
-            const token = await user.generateAuthToken()
-            res.status(201).send({ user, token })
+            await user.save().then(user => {
+                const logger = new LoggerModel({
+                    action: 'signin',
+                    author: user._id
+                })
+                logger.save()
+            })
+
+            res.status(201).send({ user })
     
         } 
         catch(e) 
@@ -27,16 +39,34 @@ User.signin = async(req, res) =>
 
 }
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 User.login = async(req, res) =>
 {
     try 
     {
-        const user = await User.findByCredentials(req.body.email, req.body.password)
+        const user = await UserModel.findByCredentials(req.body.email, req.body.password).then(user => {
+            if(user.error == true)
+            {
+                const logger = new LoggerModel({
+                    action: 'login error',
+                    author: user._id
+                })
+                logger.save()
+
+                res.status(401).send('Login error')
+            }
+        })
         const token = await user.generateAuthToken()
+        
         res.send({ user, token })
     } 
     catch (e) 
     {
+        console.log(e)
         res.status(400).send()
     }
 }

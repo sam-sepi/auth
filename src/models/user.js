@@ -2,6 +2,7 @@ const mongoose = require('mongoose'); //mongoose
 const validator = require('validator'); //validator
 const bcrypt = require('bcryptjs') //bcrypt
 const jwt = require('jsonwebtoken') //jsonwebtoken
+const LoggerModel = require('./logger')
 
 //https://mongoosejs.com/docs/guide.html#definition
 const userSchema = new mongoose.Schema(
@@ -78,20 +79,20 @@ userSchema.methods.generateAuthToken = async function ()
 }
 
 //Adds static "class" methods to Models compiled from this schema.
-userSchema.statics.findByCredentials = async (email, password) => 
+userSchema.statics.findByCredentials = async(email, password) => 
 {
     const user = await User.findOne({ email })
 
-    if (!user) 
+    if(!user) 
     {
         throw new Error('Unable to login')
     }
 
     const isAuth = await bcrypt.compare(password, user.password)
 
-    if (!isAuth) 
+    if(!isAuth) 
     {
-        throw new Error('Unable to login')
+        user.error = true;
     }
 
     return user
@@ -102,7 +103,8 @@ userSchema.pre('save', async function (next)
 {
     const user = this
 
-    if (user.isModified('password')) {
+    if (user.isModified('password')) 
+    {
         user.password = await bcrypt.hash(user.password, 8)
     }
 
