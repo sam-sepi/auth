@@ -2,6 +2,7 @@ const mongoose = require('mongoose'); //mongoose
 const validator = require('validator'); //validator
 const bcrypt = require('bcryptjs') //bcrypt
 const jwt = require('jsonwebtoken') //jsonwebtoken
+const Logger = require('./logger')
 
 //https://mongoosejs.com/docs/guide.html#definition
 const userSchema = new mongoose.Schema(
@@ -108,6 +109,13 @@ userSchema.pre('save', async function (next)
     }
 
     next()
+})
+
+//Creates a virtual type with the given name.
+userSchema.virtual('logs', {
+    ref: 'Logger',
+    localField: '_id',
+    foreignField: 'author'
 })
 
 /**

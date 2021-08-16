@@ -48,18 +48,21 @@ User.login = async(req, res) =>
 {
     try 
     {
-        const user = await UserModel.findByCredentials(req.body.email, req.body.password).then(user => {
-            if(user.error == true)
+        const user = await UserModel.findByCredentials(req.body.email, req.body.password)
+            .then(user => 
             {
-                const logger = new LoggerModel({
-                    action: 'login error',
-                    author: user._id
-                })
-                logger.save()
+                if(user.error == true)
+                {
+                    const logger = new LoggerModel({
+                        action: 'login error',
+                        author: user._id
+                    })
+                    logger.save()
 
-                res.status(401).send('Login error')
-            }
-        })
+                    res.status(401).send('Login error')
+                }
+            })
+        
         const token = await user.generateAuthToken()
         
         res.send({ user, token })
