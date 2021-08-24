@@ -28,7 +28,6 @@ const userSchema = new mongoose.Schema(
             required: true,
             trim: true,
             lowercase: true,
-
             validate(value) 
             {
                 if(!validator.isEmail(value)) 
@@ -42,8 +41,8 @@ const userSchema = new mongoose.Schema(
         {
             type: String,
             required: true,
-            minlength: 7,
-            trim: true 
+            trim: true,
+            match: [/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/, '7 to 15 characters which contain at least one numeric digit and a special character']
         },
         date: 
         {
