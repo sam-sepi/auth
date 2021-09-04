@@ -6,33 +6,33 @@ const Log = require('../models/log');
  * @param {name, email, password, confirm} req 
  * @param {user, token} res 
  */
-exports.signin = async(req, res) => 
-{
-    if(req.body.password == req.body.confirm)
-    {
-        try {
-
-            const user = new User(req.body)
-
-            await user.save()
-
-            const log = new Log({action: 'signin', author: user.id})
-
-            await log.save()
-
-            res.status(201).send({ user })
+exports.signin = async(req, res) => {
     
-        } 
-        catch(e) 
-        {
-            res.status(400).send({ message: e.message })
+    if(req.body.password == req.body.confirm) {
+        
+        if(req.body.password.match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/)) {
+
+            try {
+
+                const user = new User(req.body)
+    
+                await user.save()
+    
+                const log = new Log({action: 'signin', author: user.id})
+    
+                await log.save()
+    
+                res.status(201).send({ user })
+            } 
+            catch(e) {
+                res.status(400).send({ message: e.message })
+            }
+        } else {
+            res.status(400).send('Password (7-15 chars) must contain upper, lower, digit and special chars')
         }
-    }
-    else
-    {
+    }else {
         res.status(400).send('Password field and confirm password not equals')
     }
-
 }
 
 /**
