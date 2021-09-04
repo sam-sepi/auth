@@ -1,5 +1,5 @@
 const UserModel = require('../models/user.js');
-const LoggerModel = require('../models/logger.js');
+const LogModel = require('../models/logger.js');
 
 const User = {}
 
@@ -10,26 +10,24 @@ const User = {}
  */
 User.signin = async(req, res) => 
 {
-    const user = new UserModel(req.body)
-
     if(req.body.password == req.body.confirm)
     {
         try {
 
-            await user.save().then(user => {
-                const logger = new LoggerModel({
-                    action: 'signin',
-                    author: user._id
-                })
-                logger.save()
-            })
+            const user = new UserModel(req.body)
+
+            await user.save()
+
+            const log = new LogModel({ action: 'signin', author: user.id})
+
+            await log.save()
 
             res.status(201).send({ user })
     
         } 
         catch(e) 
         {
-            res.status(400).send(e)
+            res.status(400).send({ message: e })
         }
     }
     else

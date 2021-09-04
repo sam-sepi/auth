@@ -1,31 +1,29 @@
 const mongoose = require('mongoose');
 
-const LoggerSchema = new mongoose.Schema(
+const LogsSchema = new mongoose.Schema({
+    action: 
     {
-        action: 
+        type: String, 
+        required: true,
+        enum: 
         {
-            type: String, 
-            required: true,
-            enum: 
-            {
-                values: ['signin', 'login', 'login error', 'record jwt', 'jwt error', 'logout'],
-                message: '{VALUE} is not supported'
-            }
-        },
-        author:
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            ref: 'User'
-        },
-        date: 
-        {
-            type: Date, 
-            default: Date.now 
+            values: ['signin', 'login', 'login error', 'record jwt', 'jwt error', 'logout'],
+            message: '{VALUE} is not supported'
         }
+    },
+    author:
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
+    },
+    date: 
+    {
+        type: Date, 
+        default: Date.now 
     }
-)
+})
 
-const Logger = mongoose.model('Log', LoggerSchema)
+const Log = mongoose.model('Log', LogsSchema)
 
-module.exports = Logger
+module.exports = Log
