@@ -1,24 +1,22 @@
-const UserModel = require('../models/user.js');
-const LogModel = require('../models/logger.js');
-
-const User = {}
+const User = require('../models/user');
+const Log = require('../models/log');
 
 /**
  * 
- * @param {req.body.name, req.body.email, req.body.password, req.body.confirm} req 
+ * @param {name, email, password, confirm} req 
  * @param {user, token} res 
  */
-User.signin = async(req, res) => 
+exports.signin = async(req, res) => 
 {
     if(req.body.password == req.body.confirm)
     {
         try {
 
-            const user = new UserModel(req.body)
+            const user = new User(req.body)
 
             await user.save()
 
-            const log = new LogModel({ action: 'signin', author: user.id})
+            const log = new Log({action: 'signin', author: user.id})
 
             await log.save()
 
@@ -27,7 +25,7 @@ User.signin = async(req, res) =>
         } 
         catch(e) 
         {
-            res.status(400).send({ message: e })
+            res.status(400).send({ message: e.message })
         }
     }
     else
@@ -38,38 +36,28 @@ User.signin = async(req, res) =>
 }
 
 /**
+ * LOGIN 
  * 
- * @param {*} req 
- * @param {*} res 
+ * @param {email, password} req 
+ * @param {user, token} res 
  */
-User.login = async(req, res) =>
+exports.login = async(req, res) =>
 {
     try 
     {
-        const user = await UserModel.findByCredentials(req.body.email, req.body.password)
-            .then(user => 
-            {
-                if(user.error == true)
-                {
-                    const logger = new LoggerModel({
-                        action: 'login error',
-                        author: user._id
-                    })
-                    logger.save()
-
-                    res.status(401).send('Login error')
-                }
-            })
+        const user = await User.findByCredentials(req.body.email, req.body.password)
         
+        const log = new Log({action: 'login', author: user.id})
+        
+        await log.save()
+
         const token = await user.generateAuthToken()
         
         res.send({ user, token })
     } 
-    catch (e) 
+    catch(e) 
     {
         console.log(e)
         res.status(400).send()
     }
 }
-
-module.exports = User

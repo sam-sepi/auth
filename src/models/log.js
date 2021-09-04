@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const LogsSchema = new mongoose.Schema({
+const LogSchema = new mongoose.Schema({
     action: 
     {
         type: String, 
@@ -24,6 +24,6 @@ const LogsSchema = new mongoose.Schema({
     }
 })
 
-const Log = mongoose.model('Log', LogsSchema)
+const Log = mongoose.model('Log', LogSchema)
 
 module.exports = Log

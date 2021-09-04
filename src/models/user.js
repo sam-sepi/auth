@@ -11,17 +11,15 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 //https://mongoosejs.com/docs/guide.html#definition
 const userSchema = new mongoose.Schema({
-    
     username: {
         type: String,
         required: [true, 'required'],
         trim: true,
         unique: true,
-        validate(value)
-        {
+        validate(value){
             if(!validator.isAlphanumeric(value))
             {
-                throw new Error('Username alphanumeric required')
+                throw new Error('Username alphanumeric required. No ws')
             }
         }
     },
@@ -31,8 +29,7 @@ const userSchema = new mongoose.Schema({
         required: [true, 'required'],
         trim: true,
         lowercase: true,
-        validate(value)
-        {
+        validate(value){
             if(!validator.isEmail(value))
             {
                 throw new Error('Email invalid')
@@ -42,8 +39,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'required'],
-        trim: true,
-        match: [/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/, '7 to 15 characters which contain at least one numeric digit and a special character']
+        trim: true
     },
     date: {
         type: Date, 
