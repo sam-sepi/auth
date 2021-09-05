@@ -7,7 +7,7 @@ const LogSchema = new mongoose.Schema({
         required: true,
         enum: 
         {
-            values: ['signin', 'login', 'login error', 'record jwt', 'jwt error', 'logout'],
+            values: ['signin', 'login', 'logout'],
             message: '{VALUE} is not supported'
         }
     },

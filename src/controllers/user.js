@@ -28,7 +28,7 @@ exports.signin = async(req, res) => {
                 res.status(400).send({ message: e.message })
             }
         } else {
-            res.status(400).send('Password (7-15 chars) must contain upper, lower, digit and special chars')
+            res.status(400).send('Password (7-15 chars) must contain upper, lower, digit and special character')
         }
     }else {
         res.status(400).send('Password field and confirm password not equals')

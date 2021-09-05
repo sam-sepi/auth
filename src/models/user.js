@@ -95,8 +95,8 @@ userSchema.statics.findByCredentials = async(email, password) => {
 }
 
 //Defines a pre hook for the model.
-userSchema.pre('save', async function (next) 
-{
+userSchema.pre('save', async function (next) {
+    
     const user = this
 
     if (user.isModified('password')) {
@@ -112,7 +112,7 @@ userSchema.pre('save', async function (next)
  * 2) The localField and foreignField options. Mongoose will populate documents from the model in ref whose foreignField matches this document's localField.
  */
 userSchema.virtual('logs', {
-    ref: 'Logger',
+    ref: 'Log',
     localField: '_id',
     foreignField: 'author'
 })

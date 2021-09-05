@@ -7,7 +7,7 @@ var helmet = require('helmet');
 app.use(helmet())
 
 //XSS CLEAN init
-var xss = require('xss-clean')
+var xss = require('xss-clean');
 app.use(xss()) //make sure this comes before any routes -> XSS prevent
 
 //DB CONN
@@ -19,6 +19,9 @@ const PORT = 3008
 //JSON 
 app.use(express.json({ limit: '10kb' })); // Body limit is 10 -> DoS prevent
 
+// Limit request. Apply to all requests -> limit 100 request 10 min
+const limiter = require('./src/middleware/limiter');
+app.use(limiter)
 
 //USER ROUTING
 const userRouter = require('./src/routers/user')
