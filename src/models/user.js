@@ -62,8 +62,9 @@ userSchema.plugin(uniqueValidator, { message: 'Username or email taken'});
 //Adds an instance method to documents constructed from Models compiled from this schema.
 userSchema.methods.generateAuthToken = async function () {
     
-    const user = this
-    const token = jwt.sign({ _id: user._id.toString() }, 'mysecretokenbl@')
+    const user = this 
+    //expires 24h
+    const token = jwt.sign({ _id: user._id.toString() }, 'mysecretokenbl@', { expiresIn: '1h' })
 
     if(!token) 
     {

@@ -1,5 +1,5 @@
-var RateLimit = require('express-rate-limit');
-var MongoStore = require('rate-limit-mongo');
+var RateLimit = require('express-rate-limit')
+var MongoStore = require('rate-limit-mongo')
 
 const limiter = new RateLimit({
     store: new MongoStore({
@@ -7,7 +7,7 @@ const limiter = new RateLimit({
         //user: 'mongouser',
         //password: 'mongopassword',
         // should match windowMs
-        expireTimeMs: 10 * 60 * 1000, //15 min
+        expireTimeMs: 10 * 60 * 1000, //10 min
         errorHandler: console.error.bind(null, 'rate-limit-mongo')
         // see Configuration section for more options and details
     }),
