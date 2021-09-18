@@ -62,6 +62,11 @@ exports.login = async(req, res) =>
     }
 }
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.logout = async (req, res) => {
     try {
         req.user.tokens = []
